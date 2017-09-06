@@ -52,7 +52,6 @@ ravadaApp.directive("solShowMachine", swMach)
           }
           else return "<NONE>";
       };
-
       $scope.validate_new_name = function() {
           $http.get('/machine/exists/'+$scope.name)
                 .then(duplicated_callback, unique_callback);

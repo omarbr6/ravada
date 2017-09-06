@@ -57,7 +57,7 @@
             <label for="name" class="col-lg-2 control-label"><%=l 'Name' %></label>
             <div class="col-lg-10">
                 <input class="form-control" ng-model="name" type="text"
-                    name="name" required=""
+                    name="name" required="" maxlength="20"
                     ng-pattern ="/^[a-zA-Z0-9_.-]+$/"
                     ng-change="validate_new_name()"
                 >
@@ -111,9 +111,9 @@
                 <div ng-show="new_machineForm.name.$error.required" class="alert alert-warning fade in">
                     <strong><%=l "Error" %></strong> <%=l 'Machine name is required.' %>
                 </div>
-                <div ng-show="new_machineForm.name.$error.maxlength" class="alert alert-warning fade in">
+      <!--          <div ng-show="new_machineForm.name.$error.maxlength" class="alert alert-warning fade in">
                     <strong><%=l 'Error' %></strong> <%=l "Machine name can't exceed 20 characters." %>
-                </div>
+                </div> -->
             </div>
             <div ng-show="new_machineForm.$submitted || new_machineForm.backend.$touched">
                 <div ng-show="new_machineForm.backend.$error.required" class="alert alert-warning fade in">
@@ -141,7 +141,6 @@
                     <strong><%=l 'Error' %></strong> <%=l 'ISO image selection is required.' %>
                 </div>
             </div>
-
             <div ng-show="new_machineForm.$submitted || new_machineForm.id_template.$touched">
                 <div ng-show="new_machineForm.id_template.$error.required" class="alert alert-warning fade in">
                     <strong><%=l 'Error' %></strong> <%=l 'Template selection is required' %>
@@ -153,11 +152,11 @@
             <div ng-show="new_machineForm.name.$error.pattern" class="alert alert-warning fade in">
                     <strong><%=l 'Error' %></strong> <%=l 'The machine name must contain only alphabetic, numbers, dashes and points.' %>
             </div>
-        </div>
+      </div>
       
-        <div class="form-group row">
-             <input type="submit" class="btn btn-default" name="submit" value="<%=l 'Create' %>"
-                 ng-disabled="new_machineForm.$invalid || (!new_machineForm.id_iso.$viewValue.device && (new_machineForm.iso_file.$modelValue == '<NONE>')) || name_duplicated">
-        </div>
-    </form>
+      <div class="form-group row">
+           <input type="submit" class="btn btn-default" name="submit" value="<%=l 'Create' %>"
+            ng-disabled="new_machineForm.$invalid || (!new_machineForm.id_iso.$viewValue.device && (new_machineForm.iso_file.$modelValue == '<NONE>')) || name_duplicated">
+      </div>
+</form>
 </div>
