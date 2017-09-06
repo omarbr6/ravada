@@ -20,7 +20,7 @@
                     </div>
                 % }
                 <input class="form-control" type="text" name="new_name" ng-model="new_name"
-                             ng-change="validate_new_name(showmachine.name)"
+                             ng-change="validate_new_name(showmachine.name, 0)"
                              ng-disabled="<%= $disable_rename %>"
                 >
                 <button type="button" ng-disabled="<%= $disable_rename %> || new_name_duplicated"

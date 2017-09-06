@@ -6,9 +6,11 @@
                 <input class="form-control" type="hidden" name="id_base" value="{{showmachine.id}}">
                     <label class="col-lg-2" for="copy_name_{{showmachine.id}}"><%=l 'Name' %>:</label>
                 <div class="col-lg-10">
-                    <input class="form-control" name="copy_name_{{showmachine.id}}" type="text" size="40"
-                    value="{{showmachine.name}}-copy">
-                    <!-- todo check unique name -->
+                    <input class="form-control" name="new_name_copy" type="text" size="40"
+                           ng-model="new_name_copy" ng-change="validate_new_name(NULL,1)">
+                    <div ng-show="new_name_duplicated" class="alert alert-warning fade in">
+                            <strong><%=l 'Error' %></strong> <%=l 'A machine with that name already exists.' %>
+                    </div>
                 </div>
                     <br/>
                     <label class="col-lg-2" for="copy_ram">RAM (Gb):</label>

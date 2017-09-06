@@ -155,14 +155,20 @@
             $http.get('/machine/rename/'+machineId+'/'
             +$scope.new_name);
           };
-
-          $scope.validate_new_name = function(old_name) {
-            if(old_name == $scope.new_name) {
+          $scope.new_name_copy = "-copy";
+          $scope.validate_new_name = function(old_name, copy_case) {
+            if(copy_case && old_name == $scope.new_name) {
               $scope.new_name_duplicated=false;
               return;
             }
-            $http.get('/machine/exists/'+$scope.new_name)
-            .then(duplicated_callback, unique_callback);
+            if (copy_case == 0) {
+                $http.get('/machine/exists/'+$scope.new_name)
+                .then(duplicated_callback, unique_callback);
+            }
+            else {
+              $http.get('/machine/exists/'+$scope.new_name_copy)
+              .then(duplicated_callback, unique_callback);      
+            }
             function duplicated_callback(response) {
               $scope.new_name_duplicated=response.data;
             };
