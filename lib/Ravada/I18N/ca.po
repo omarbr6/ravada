@@ -1,6 +1,7 @@
 # Translators:
 # Fernando Verdugo <fv3rdugo@gmail.com>, 2017
 # Joel Alarcón <joelalju100@gmail.com>, 2017
+# Omar Brid <omarbr6@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0-alpha\n"
@@ -275,13 +276,6 @@ msgstr ""
 msgid "To make this possible, download"
 msgstr "Per fer-ho possible, descarrega"
 
-msgid ""
-"or copy the following lines in an ASCII file and save with extension .reg, "
-"then execute the file."
-msgstr ""
-"o copia les següents línies en un arxiu ASCII, desa'l amb l'extensió .reg, i "
-"a continuació, executa l'arxiu."
-
 msgid "Login"
 msgstr "Accedir"
 
@@ -362,9 +356,6 @@ msgstr "Registrar"
 
 msgid "Search"
 msgstr "Cerca"
-
-msgid "Admin tools"
-msgstr "Eines d'administració"
 
 msgid "Admin tools"
 msgstr "Eines d'administració"

@@ -18,7 +18,7 @@
                         <h3><%=l 'Development' %></h3>
                         <p><%=l 'Below are listed the technologies used in this project:' %></p>
                         <ul>
-                        <li>It's programmed in><a href="https://www.perl.org/">Perl</a>,</li>
+                        <li>It's programmed in <a href="https://www.perl.org/">Perl</a>,</li>
                         <li> with perl framework <a href="http://www.mojolicious.org/">Mojolicious</a>,</li>
                         <li> and HTML, CSS, and JS framework <a href="http://getbootstrap.com/">Bootstrap</a></li>
                         </ul>

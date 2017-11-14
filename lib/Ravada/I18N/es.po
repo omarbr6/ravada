@@ -168,9 +168,6 @@ msgstr "proceso"
 msgid "Copy"
 msgstr "Copia"
 
-msgid "Admin tools"
-msgstr ""
-
 msgid "Remove base"
 msgstr "Elimina base"
 
@@ -197,9 +194,6 @@ msgstr "Estás seguro/a?"
 
 msgid "Yes"
 msgstr "Sí"
-
-msgid "No"
-msgstr ""
 
 msgid "Make public"
 msgstr "Haz público"
@@ -234,7 +228,7 @@ msgstr "o"
 msgid "bits) in your computer."
 msgstr "bits) en tu ordenador."
 
-msgid "Be aware that in Windows, spice redirection is not automatically. It\'s necessary associate protocol with the app."
+msgid "Be aware that in Windows, spice redirection is not automatically. It's necessary associate protocol with the app."
 msgstr "Atención a que en Windows, la redirección spice no es automàtica. Es necesario asociar el protocolo con la app."
 
 msgid "To make this possible, download"
@@ -308,3 +302,27 @@ msgstr "Error!"
 
 msgid "Backend no available!"
 msgstr " Backend no disponible!"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Authors"
+msgstr "Autores"
+
+msgid "Development"
+msgstr "Desarrollo"
+
+msgid "License"
+msgstr "Licencia"
+
+msgid "Below are listed the technologies used in this project:"
+msgstr "Debajo están listadas las tecnologías usadas en este proyecto:"
+
+msgid "The code is "
+msgstr "El código tiene una licencia "
+
+msgid " licensed."
+msgstr "."
+
+msgid "The code is available on "
+msgstr "El código está disponible en"
