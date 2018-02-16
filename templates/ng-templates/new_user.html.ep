@@ -64,7 +64,6 @@
                 </div>
             </div>
 
-
             <button type="submit" ng-disabled="new_userForm.$invalid || cpassword != password" id="submitbutton" class="btn btn-default">Submit</button>
             % if (scalar @$error) {
 
