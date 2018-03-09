@@ -199,6 +199,7 @@ sub _update_isos {
                     ,url => 'http://dl-cdn.alpinelinux.org/alpine/v3.7/releases/x86_64/'
                 ,file_re => 'alpine-virt-3.7.\d+-x86_64.iso'
                 ,sha256_url => 'http://dl-cdn.alpinelinux.org/alpine/v3.7/releases/x86_64/alpine-virt-3.7.0-x86_64.iso.sha256'
+                ,min_disk_size => '10'
         }
         ,artful => {
                     name => 'Ubuntu Artful Aardvark'
@@ -231,6 +232,7 @@ sub _update_isos {
         ,file_re => 'linuxmint-18.1-mate-64bit.iso'
         ,md5_url => ''
             ,md5 => 'c5cf5c5d568e2dfeaf705cfa82996d93'
+            ,min_disk_size => '10'
 
         }
         ,fedora => {
@@ -241,6 +243,7 @@ sub _update_isos {
             ,xml => 'xenial64-amd64.xml'
             ,xml_volume => 'xenial64-volume.xml'
             ,sha256_url => '$url/Fedora-Workstation-25-.*-x86_64-CHECKSUM'
+            ,min_disk_size => '10'
         }
         ,fedora_26 => {
             name => 'Fedora 26'
@@ -250,6 +253,7 @@ sub _update_isos {
             ,xml => 'xenial64-amd64.xml'
             ,xml_volume => 'xenial64-volume.xml'
             ,sha256_url => 'http://fedora.mirrors.ovh.net/linux/releases/26/Workstation/x86_64/iso/Fedora-Workstation-26-.*-x86_64-CHECKSUM'
+            ,min_disk_size => '10'
         }
         ,fedora_27 => {
             name => 'Fedora 27'
@@ -259,6 +263,7 @@ sub _update_isos {
             ,xml => 'xenial64-amd64.xml'
             ,xml_volume => 'xenial64-volume.xml'
             ,sha256_url => 'http://fedora.mirrors.ovh.net/linux/releases/27/Workstation/x86_64/iso/Fedora-Workstation-27-.*-x86_64-CHECKSUM'
+            ,min_disk_size => '10'
         }
         ,xubuntu_artful => {
             name => 'Xubuntu Artful Aardvark'
@@ -270,6 +275,7 @@ sub _update_isos {
             ,url => 'http://archive.ubuntu.com/ubuntu/dists/artful/main/installer-amd64/current/images/netboot/'
             ,file_re => 'mini.iso'
             ,rename_file => 'xubuntu_artful.iso'
+            ,min_disk_size => '10'
         }
         ,xubuntu_zesty => {
             name => 'Xubuntu Zesty Zapus'
@@ -281,6 +287,7 @@ sub _update_isos {
             ,url => 'http://archive.ubuntu.com/ubuntu/dists/zesty/main/installer-amd64/current/images/netboot'
             ,file_re => 'mini.iso'
             ,rename_file => 'xubuntu_zesty_mini.iso'
+            ,min_disk_size => '10'
         }
         ,xubuntu_xenial => {
             name => 'Xubuntu Xenial Xerus'
@@ -290,6 +297,7 @@ sub _update_isos {
             ,xml_volume => 'yakkety64-volume.xml'
             ,md5 => 'fe495d34188a9568c8d166efc5898d22'
             ,rename_file => 'xubuntu_xenial_mini.iso'
+            ,min_disk_size => '10'
         }
        ,lubuntu_aardvark => {
             name => 'Lubuntu Artful Aardvark'
@@ -298,6 +306,7 @@ sub _update_isos {
             ,md5_url => '$url/MD5SUMS'
             ,xml => 'yakkety64-amd64.xml'
             ,xml_volume => 'yakkety64-volume.xml'
+            ,min_disk_size => '10'
         }
         ,lubuntu_xenial => {
             name => 'Lubuntu Xenial Xerus'
@@ -307,6 +316,7 @@ sub _update_isos {
             ,md5_url => '$url/MD5SUMS'
             ,xml => 'yakkety64-amd64.xml'
             ,xml_volume => 'yakkety64-volume.xml'
+            ,min_disk_size => '10'
         }
         ,debian_jessie_32 => {
             name =>'Debian Jessie 32 bits'
@@ -316,6 +326,7 @@ sub _update_isos {
             ,md5_url => '$url/MD5SUMS'
             ,xml => 'jessie-amd64.xml'
             ,xml_volume => 'jessie-volume.xml'
+            ,min_disk_size => '10'
         }
         ,debian_jessie_64 => {
             name =>'Debian Jessie 64 bits'
@@ -325,6 +336,7 @@ sub _update_isos {
             ,md5_url => '$url/MD5SUMS'
             ,xml => 'jessie-amd64.xml'
             ,xml_volume => 'jessie-volume.xml'
+            ,min_disk_size => '10'
         }
         ,debian_stretch => {
             name =>'Debian Stretch 64 bits'
@@ -334,6 +346,7 @@ sub _update_isos {
             ,md5_url => '$url/MD5SUMS'
             ,xml => 'jessie-amd64.xml'
             ,xml_volume => 'jessie-volume.xml'
+            ,min_disk_size => '10'
         }
         ,windows_7 => {
           name => 'Windows 7'
@@ -365,6 +378,7 @@ sub _update_isos {
           .'<a target="_blank" href="http://ravada.readthedocs.io/en/latest/docs/new_iso_image.html">[help]</a>'
           ,xml => 'windows_12.xml'
           ,xml_volume => 'wisuvolume.xml'
+          ,min_disk_size => '21'
         }
         ,windows_8 => {
           name => 'Windows 8.1'
@@ -803,6 +817,7 @@ sub _upgrade_tables {
     $self->_upgrade_table('domains','status','varchar(32) DEFAULT "shutdown"');
     $self->_upgrade_table('domains','display','varchar(128) DEFAULT NULL');
     $self->_upgrade_table('domains','info','varchar(255) DEFAULT NULL');
+    $self->_upgrade_table('domains','internal_id','varchar(64) DEFAULT NULL');
 
     $self->_upgrade_table('domains_network','allowed','int not null default 1');
 
@@ -841,10 +856,18 @@ Returns the default display IP read from the config file
 =cut
 
 sub display_ip {
-
     my $ip = $CONFIG->{display_ip};
-
     return $ip if $ip;
+}
+
+=head2 nat_ip
+
+Returns the IP for NATed environments
+
+=cut
+
+sub nat_ip {
+    return $CONFIG->{nat_ip} if exists $CONFIG->{nat_ip};
 }
 
 sub _init_config {
