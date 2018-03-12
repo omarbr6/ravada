@@ -52,9 +52,11 @@ my $CONFIG_FRONT = plugin Config => { default => {
                                               ,login_header => 'Welcome'
                                               ,login_message => ''
                                               ,secrets => ['changeme0']
+                                              ,guide => 0
                                               ,login_custom => ''
                                               ,footer => 'bootstrap/footer'
                                               ,monitoring => 0
+                                              ,guide_custom => ''
                                               ,admin => {
                                                     hide_clones => 15
                                               }
@@ -121,6 +123,7 @@ hook before_routes => sub {
             ,_user => undef
             ,footer=> $CONFIG_FRONT->{footer}
             ,monitoring => $CONFIG_FRONT->{monitoring}
+            ,guide => $CONFIG_FRONT->{guide}
             );
 
   return access_denied($c)
@@ -832,6 +835,7 @@ sub login {
                       ,login_header => $CONFIG_FRONT->{login_header}
                       ,login_message => $CONFIG_FRONT->{login_message}
                       ,monitoring => $CONFIG_FRONT->{monitoring}
+                      ,guide => $CONFIG_FRONT->{guide}
     );
 }
 
@@ -880,6 +884,12 @@ sub quick_start {
 
 sub render_machines_user {
     my $c = shift;
+
+    if ($CONFIG_FRONT->{guide_custom}) {
+        push @{$c->stash->{js}}, $CONFIG_FRONT->{guide_custom};
+    } else {
+        push @{$c->stash->{js}}, '/js/ravada_guide.js';
+    }
     return $c->render(
         template => 'main/list_bases2'
         ,machines => $RAVADA->list_machines_user($USER)
