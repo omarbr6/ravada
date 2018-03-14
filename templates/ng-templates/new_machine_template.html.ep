@@ -61,7 +61,7 @@
             <div class="col-lg-9">
                 <input class="form-control" ng-model="name" type="text"
                     name="name" required=""
-                    ng-pattern ="/^[a-zA-Z0-9_.-]+$/"
+                    ng-pattern ="/^[a-zA-Z0-9_-]+$/"
                     ng-change="validate_new_name()"
                 >
             </div>
@@ -82,7 +82,7 @@
             <label for="disk" class="col-lg-3 control-label"><%=l 'Disk Size: (GB)' %></label>     
             <div class="col-lg-2">
                 <input class="slider form-control" ng-model="ddsize" type="range" name="disk"
-                    min="{{min_size}}" max="100" value="20" required="">
+                    min="{{min_size}}" max="100" required="">
             </div>{{ddsize}}
               <a ng-show="!seeswap"
                   ng-click="show_swap()"
@@ -94,6 +94,7 @@
                   align="right">Remove swap</a>
               <div ng-show="showMinSize">
                 <font color="#500000"><%=l 'The Minimum Disk Size needed for this ISO is' %> {{min_size}}GB.</font>
+                <font color="orange"><%=l 'The Minimum Disk Size needed for this ISO is' %> {{min_size}}GB.</font>
             </div>  
         </div>
         <div class="form-group row" ng-show="seeswap" ng-if="backend == 'KVM'">
@@ -157,7 +158,7 @@
                     <strong><%=l 'Error' %></strong> <%=l 'A machine with that name already exists.' %>
             </div>
             <div ng-show="new_machineForm.name.$error.pattern" class="alert alert-warning fade in">
-                    <strong><%=l 'Error' %></strong> <%=l 'The machine name must contain only alphabetic, numbers, dashes and points.' %>
+                    <strong><%=l 'Error' %></strong> <%=l 'The machine name must contain only alphabetic, numbers, undercores and dashes.' %>
             </div>
         </div>
       
