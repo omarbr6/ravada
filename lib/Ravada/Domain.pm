@@ -73,7 +73,9 @@ requires 'get_info';
 requires 'set_memory';
 requires 'set_max_mem';
 
+requires 'autostart';
 requires 'hybernate';
+requires 'hibernate';
 
 ##########################################################
 
@@ -148,6 +150,9 @@ before 'pause' => \&_allow_manage;
 before 'hybernate' => \&_allow_manage;
  after 'hybernate' => \&_post_hibernate;
 
+before 'hibernate' => \&_allow_manage;
+ after 'hibernate' => \&_post_hibernate;
+
 before 'resume' => \&_allow_manage;
  after 'resume' => \&_post_resume;
 
@@ -171,6 +176,7 @@ after '_select_domain_db' => \&_post_select_domain_db;
 
 around 'get_info' => \&_around_get_info;
 
+around 'autostart' => \&_around_autostart;
 ##################################################
 #
 
@@ -345,7 +351,26 @@ sub _post_prepare_base {
     }
 
     $self->_remove_id_base();
+    $self->autostart(0,$user);
 };
+
+sub _around_autostart($orig, $self, @arg) {
+    my ($value, $user) = @arg;
+    $self->_allowed($user) if defined $value;
+    confess "ERROR: Autostart can't be activated on base ".$self->name
+        if $value && $self->is_base;
+
+    confess "ERROR: You can't set autostart on readonly domains"
+        if defined $value && $self->readonly;
+    my $autostart = 0;
+    my @orig_args = ();
+    push @orig_args, ( $value) if defined $value;
+    if ( $self->$orig(@orig_args) ) {
+        $autostart = 1;
+    }
+    $self->_data(autostart => $autostart)   if defined $value;
+    return $autostart;
+}
 
 sub _check_has_clones {
     my $self = shift;
@@ -449,7 +474,7 @@ sub _around_display($orig,$self,$user) {
 
 sub _around_get_info($orig, $self) {
     my $info = $self->$orig();
-    if (ref($self) =~ /^Ravada::Domain/) {
+    if (ref($self) =~ /^Ravada::Domain/ && $self->is_known()) {
         $self->_data(info => encode_json($info));
     }
     return $info;
@@ -755,7 +780,7 @@ sub _pre_remove_domain {
     $self->pre_remove();
     $self->_allow_remove(@_);
     $self->pre_remove();
-    $self->_remove_iptables();
+    $self->_remove_iptables()   if $self->is_known();
 }
 
 sub _after_remove_domain {
@@ -1131,12 +1156,12 @@ sub _post_pause {
     my $user = shift;
 
     $self->_data(status => 'paused');
-    $self->_remove_iptables(user => $user);
+    $self->_remove_iptables();
 }
 
 sub _post_hibernate($self, $user) {
     $self->_data(status => 'hibernated');
-    $self->_remove_iptables(user => $user);
+    $self->_remove_iptables();
 }
 
 sub _pre_shutdown {
@@ -1166,9 +1191,10 @@ sub _post_shutdown {
     my $timeout = delete $arg{timeout};
 
     $self->_remove_iptables(%arg);
-    $self->_data(status => 'shutdown')    if !$self->is_volatile && !$self->is_active;
+    $self->_data(status => 'shutdown')
+        if $self->is_known && !$self->is_volatile && !$self->is_active;
     $self->_remove_temporary_machine(@_);
-    if ($self->id_base) {
+    if ($self->is_known && $self->id_base) {
         for ( 1 ..  5 ) {
             last if !$self->is_active;
             sleep 1;
@@ -1247,7 +1273,9 @@ sub _remove_iptables {
     my $user = delete $args{user};
     my $port = delete $args{port};
 
-    confess "ERROR: Unknown args ".Dumper(%args)    if keys %args;
+    delete $args{request};
+
+    confess "ERROR: Unknown args ".Dumper(\%args)    if keys %args;
 
     my $ipt_obj = _obj_iptables();
 
@@ -1255,9 +1283,10 @@ sub _remove_iptables {
         "UPDATE iptables SET time_deleted=?"
         ." WHERE id=?"
     );
-    my @iptables = $self->_active_iptables(id_domain => $self->id);
-    push @iptables, ( $self->_active_iptables(user => $user) )  if $user;
-    push @iptables, ( $self->_active_iptables(port => $port) )  if $port;
+    my @iptables;
+    push @iptables, ( $self->_active_iptables(id_domain => $self->id))  if $self->is_known();
+    push @iptables, ( $self->_active_iptables(user => $user) )          if $user;
+    push @iptables, ( $self->_active_iptables(port => $port) )          if $port;
 
     for my $row (@iptables) {
         my ($id, $iptables) = @$row;
@@ -1269,7 +1298,7 @@ sub _remove_iptables {
 sub _remove_temporary_machine {
     my $self = shift;
 
-    return if !$self->is_volatile;
+    return if !$self->is_known || !$self->is_volatile;
     my %args = @_;
     my $user = delete $args{user} or confess "ERROR: Missing user";
 
